@@ -5,36 +5,36 @@
 
         public class Product
         {
-
+           public string Name { get; set; } 
+            public double Price { get; set; }
         }
 
         static void Main(string[] args)
         {
 
-            List<int> numbers = new List<int> { 10,5,15,3,9,25,18};
-
-            //foreach (int i in numbers)
-            //{
-            //    Console.WriteLine(i);
-            //}
-
-            bool hasLargeNumber = numbers.Any(x => x > 20);
-
-            if(hasLargeNumber)
+            List<Product> products = new List<Product>
             {
-                Console.WriteLine("There are large numbers");
-            }else
+                new Product { Name = "Bananas", Price = 3.99 },
+                new Product { Name = "Apples", Price = 1.99 } ,
+                new Product { Name = "Pineapple", Price = 5.99 }
+
+            };
+
+
+            products.Add(new Product
             {
-                Console.WriteLine("No large numbers");
-            }
+                Name = "Berries",
+                Price = 2.99
+            });
 
-            //Predicate<int> isGreaterThanten = x => x > 10;
 
-            //List<int> higherTen = numbers.FindAll(isGreaterThanten);
-            //foreach (int i in higherTen)
-            //{
-            //    Console.WriteLine(i);
-            //}
+            List<Product> cheapProducts = products.Where(p => p.Price < 3).ToList();
+
+            Console.WriteLine("Available cheap products: ");
+
+            foreach (Product p in cheapProducts) Console.WriteLine($"Product name: {p.Name}, Price: {p.Price}");
+
+
 
             Console.ReadKey();
         }
