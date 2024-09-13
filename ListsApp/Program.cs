@@ -2,37 +2,39 @@
 {
     internal class Program
     {
+
+        public class Product
+        {
+
+        }
+
         static void Main(string[] args)
         {
 
-            List<string> colours = new List<string>();
-            colours.Add("red");
-            colours.Add("blue");
-            colours.Add("green");
-            colours.Add("red");
-            
-            Console.WriteLine("Current colours");
-            foreach (string colour in colours)
+            List<int> numbers = new List<int> { 10,5,15,3,9,25,18};
+
+            //foreach (int i in numbers)
+            //{
+            //    Console.WriteLine(i);
+            //}
+
+            bool hasLargeNumber = numbers.Any(x => x > 20);
+
+            if(hasLargeNumber)
             {
-                Console.WriteLine(colour);
+                Console.WriteLine("There are large numbers");
+            }else
+            {
+                Console.WriteLine("No large numbers");
             }
 
-            bool deleteSuccesful = colours.Remove("red");
+            //Predicate<int> isGreaterThanten = x => x > 10;
 
-            while (deleteSuccesful)
-            {
-                deleteSuccesful = colours.Remove("red");
-            }
-
-            Console.WriteLine("Current colours");
-            foreach (string colour in colours)
-            {
-                Console.WriteLine(colour);
-            }
-
-
-
-
+            //List<int> higherTen = numbers.FindAll(isGreaterThanten);
+            //foreach (int i in higherTen)
+            //{
+            //    Console.WriteLine(i);
+            //}
 
             Console.ReadKey();
         }
