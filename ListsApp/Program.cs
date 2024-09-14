@@ -1,39 +1,40 @@
 ﻿namespace ListsApp
 {
+
+
+        class Employee 
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+        public int Salary { get; set; }
+
+        public Employee(string name, int age, int salary)
+        {
+            Name = name;
+            Age = age;
+            Salary = salary;
+        }
+    }
     internal class Program
     {
 
-        public class Product
-        {
-           public string Name { get; set; } 
-            public double Price { get; set; }
-        }
 
         static void Main(string[] args)
         {
 
-            List<Product> products = new List<Product>
+
+
+            Dictionary<int , Employee> employess = new Dictionary<int , Employee>();
+
+            employess.Add(1, new Employee("John Doe", 20, 100000));
+            employess.Add(2, new Employee("Hane Doe", 45, 120000));
+            employess.Add(3, new Employee("Jane Smith", 31, 83000));
+            employess.Add(4, new Employee("Bay Mangal", 18, 50000));
+
+            foreach (var employee in employess)
             {
-                new Product { Name = "Bananas", Price = 3.99 },
-                new Product { Name = "Apples", Price = 1.99 } ,
-                new Product { Name = "Pineapple", Price = 5.99 }
-
-            };
-
-
-            products.Add(new Product
-            {
-                Name = "Berries",
-                Price = 2.99
-            });
-
-
-            List<Product> cheapProducts = products.Where(p => p.Price < 3).ToList();
-
-            Console.WriteLine("Available cheap products: ");
-
-            foreach (Product p in cheapProducts) Console.WriteLine($"Product name: {p.Name}, Price: {p.Price}");
-
+                Console.WriteLine($"ID: {employee.Key}, Named: {employee.Value.Name}, Aged: {employee.Value.Age}, Paid: {employee.Value.Salary}");
+            }
 
 
             Console.ReadKey();
