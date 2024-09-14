@@ -1,46 +1,36 @@
-﻿namespace ListsApp
+﻿using System.Globalization;
+
+namespace ListsApp
 {
-
-
-        class Employee 
+    class Student
     {
+        public int Id { get; set; }
         public string Name { get; set; }
-        public int Age { get; set; }
-        public int Salary { get; set; }
+        public int Grade { get; set; }
 
-        public Employee(string name, int age, int salary)
+        public Student(int id, string name, int grade)
         {
+            Id = id;
             Name = name;
-            Age = age;
-            Salary = salary;
+            Grade = grade;
         }
     }
     internal class Program
     {
-
-
         static void Main(string[] args)
         {
 
-            var codes = new Dictionary<string, string>
+            Dictionary<string, Student> students = new Dictionary<string, Student>
             {
-                ["NY"] = "New York",
-                ["CA"] = "Cali",
-                ["TX"] = "Texas",
+                ["John"] = new Student(1, "John", 85),
+                ["Alice"] = new Student(2, "Alice", 90),
+                ["Bob"] = new Student(3, "Bob", 78),
             };
 
-            if(codes.TryGetValue("NY", out string state))
-            {
-                Console.WriteLine(state);
+            foreach (var student in students) {
+                Console.WriteLine($"Name: {student.Value.Name}, Id: {student.Value.Id}, Grade: {student.Value.Grade}");
             }
-
-            foreach(var item in codes)
-            {
-                Console.WriteLine($"The state code is {item.Key} and the state is {item.Value}");
-            }
-
-
-            Console.ReadKey();
         }
+
     }
 }
