@@ -7,49 +7,36 @@ namespace ListsApp
         static void Main(string[] args)
         {
 
-            Dog dog = new Dog();
-            Collie collie = new Collie();
-            dog.Bark();
-            dog.Eat();
-            collie.Bark();
-            collie.GoingNuts();
+            BaseClass baseClass = new BaseClass();
+            baseClass.ShowFields();
+
+            DerivedClass derivedClass = new DerivedClass();
+            derivedClass.AccessFields();
+            derivedClass.ShowFields();
+
             Console.ReadKey();
-
         }
 
-        class Animal
+        class BaseClass 
         {
-            public void Eat()
+            public int publicField;
+            protected int protectedField;
+            private int privateField;
+
+            public void ShowFields()
             {
-                Console.WriteLine("Eating...");
+                Console.WriteLine($"Public : {publicField}, Protected: {protectedField}, Private: {privateField}");
             }
         }
 
-        class Cat : Animal
+        class DerivedClass: BaseClass
         {
-            public void Meow()
+            public void AccessFields()
             {
-                Console.WriteLine("Meowing");
+                publicField = 1;
+                protectedField = 2;
+                //privateField = 3;
             }
         }
-
-        class Dog: Animal
-        {
-            public void Bark()
-            {
-                Console.WriteLine("Barking");
-            }
-        }
-
-        class Collie: Dog
-        {
-            public void GoingNuts()
-            {
-                Console.WriteLine("Going Nuts");
-            }
-        }
-
-
-
     }
 }
