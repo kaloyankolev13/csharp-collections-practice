@@ -7,76 +7,48 @@ namespace ListsApp
     internal class Program
 
     {
-        public class Person
+        public interface IAnimal
         {
+            void MakeSound();
+            void Eat(string food);
+        }
 
-            private string Name { get; set; }
-            public int Age { get; set; }
-
-            public Person(string name, int age)
+        public class Dog : IAnimal
+        {
+            public void Eat(string food)
             {
-                Name = name;
-                Age = age;
-                Console.WriteLine("Person constructor called");
+                Console.WriteLine("Dog ate" + food);
             }
 
-            public void DisplayPersonInfo()
+            public void MakeSound()
             {
-                Console.WriteLine($"Name: {Name}, Age: {Age}");
-            }
-            /// <summary>Makes our object older.</summary>
-            /// <param name="years">The parameter that indicates the amount of years that the objects should age.</param>
-            /// <returns>Return the new age after becoming older.</returns>
-            public int BecomeOlder(int years)
-            {
-                Age += years;
-                return Age;
+                Console.WriteLine("Dog bark");
             }
         }
 
-        public class  Employee:Person
+        public class Cat : IAnimal
         {
-            public string JobTitle { get; set; }
-            public int EmloyeedID { get; set; }
-            public Employee(string name, int age, string jobTitle, int emloyeedID) : base(name, age)
+            public void Eat(string food)
             {
-                Console.WriteLine("Employee constructor called: derived");
-                JobTitle = jobTitle;
-                EmloyeedID = emloyeedID;
+                Console.WriteLine("Cat ate" + food);
             }
 
-            public void DisplayEmployeeInfo()
+            public void MakeSound()
             {
-                DisplayPersonInfo();
-                Console.WriteLine($"Job title: {JobTitle}, EmployeeID: {EmloyeedID}");
+                Console.WriteLine("Cat meow");
             }
         }
-
-        public class Manager : Employee
-        {
-            public int TeamSize {  get; private set; }
-            public Manager(string name, int age, string jobTitle, int emloyeedID, int teamSize) : base(name, age, jobTitle, emloyeedID)
-            {
-                TeamSize = teamSize;
-            }
-            public void DisplayManagerInfo()
-            {
-                DisplayEmployeeInfo();
-                Console.WriteLine($"TeamSize: {TeamSize}");
-            }
-        }
-
-
         static void Main(string[] args)
         {
-            //Employee joe = new Employee("Joe", 35,"Banker", 12421);
-            //joe.DisplayEmployeeInfo();
-            Manager carl = new Manager("Carl", 50, "Manager", 30000, 7);
-            carl.BecomeOlder(5);
-            carl.DisplayManagerInfo();
-            //carl.ToString();
-            Console.ReadKey();
+            Dog dog = new Dog();
+            dog.MakeSound();
+            dog.Eat("Treat");
 
+            Cat cat = new Cat();
+            cat.MakeSound();
+            cat.Eat("fish");
+
+            Console.ReadKey();
         }
 
     }
