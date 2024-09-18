@@ -7,57 +7,62 @@ namespace ListsApp
     internal class Program
 
     {
-
-        public interface IPaymentProcessor
+        public interface ILogger
         {
-            void ProcessPayment(decimal amount);
-        }
-
-        public class CreditCardProcessor : IPaymentProcessor
-        {
-            public void ProcessPayment(decimal amount)
-            {
-                Console.WriteLine("Processing credit card payment of the amount" + amount);
-            }
-            // Logic for paypal processors
-        }
-        public class PaypalProcessor : IPaymentProcessor
-        {
-            public void ProcessPayment(decimal amount)
-            {
-                Console.WriteLine("Processing paypal payment of the amount" + amount);
-            }
-            // Logic for paypal processors
-        }
-
-        public class PaymentService
-        {
-            private readonly IPaymentProcessor _processor;
-
-            public PaymentService(IPaymentProcessor processor)
-            {
-                _processor = processor;
-            }
-
-            public void ProcessPayment(decimal amount) 
-            {
-                _processor.ProcessPayment(amount);
-            }
+            void Log(string message);
         }
 
         static void Main(string[] args)
         {
-            // Polymorphism
-            IPaymentProcessor creditCardProcessor = new CreditCardProcessor();
-            PaymentService paymentService = new PaymentService(creditCardProcessor);
-            paymentService.ProcessPayment(100.00m);
+            ILogger fileLogger = new FileLogger();
+            Application app = new Application(fileLogger);
+            app.doWork();
 
-            IPaymentProcessor paypalProcessor = new PaypalProcessor();
-            paymentService  = new PaymentService(paypalProcessor);
-            paymentService.ProcessPayment(85.12m);
-
-            Console.ReadKey();
+            ILogger dbLogger = new DataBaseLogger();
+            app = new Application(dbLogger);
+            app.doWork();
         }
 
+        public class FileLogger : ILogger
+        {
+            public void Log(string message)
+            {
+                string dirPath = @"C:\Logs";
+                string filePath = Path.Combine(dirPath, "log.txt");
+
+                if (!Directory.Exists(dirPath))
+                {
+                    Directory.CreateDirectory(dirPath);
+                }
+
+                File.AppendAllText(filePath, message + "\n");
+            }
+        }
+        public class DataBaseLogger : ILogger
+        {
+            public void Log(string message)
+            {
+                Console.WriteLine($"Logging to DB. {message}");
+            }
+
+
+        }
+
+        public class Application
+        {
+            private readonly ILogger _logger;
+
+            public Application(ILogger logger)
+            {
+                _logger = logger;
+            }
+
+            public void doWork()
+            {
+                _logger.Log("Starting the work");
+                _logger.Log("Finishing");
+            }
+
+        }
     }
 }
