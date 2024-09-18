@@ -1,85 +1,70 @@
-﻿using System;
+﻿using System.Globalization;
+using System.Net;
+using System.Security.Cryptography;
 
-namespace Coding.Exercise
+namespace ListsApp
 {
-    public interface ILoggingService
+    internal class Program
     {
-        void Log(string message);
-    }
-
-    public class LoggingService : ILoggingService
-    {
-        public void Log(string message)
+        public interface IShape
         {
-            Console.WriteLine(message);
-        }
-    }
-
-    public class MyClassConstructorInjection
-    {
-        private readonly ILoggingService _loggingService;
-        public MyClassConstructorInjection(ILoggingService loggingService)
-        {
-            _loggingService = loggingService;
+            double GetArea();
         }
 
-        public void PerformAction()
+        public class Circle : IShape
         {
-            // TODO: Use _loggingService to log "Constructor Injection: Logging message."
-            _loggingService.Log("Constructor Injection: Logging message.");
-        }
-    }
+            private double _radius;
 
-    public class MyClassSetterInjection
-    {
-        public ILoggingService LoggingService { private get; set; }
+            public Circle(float radius)
+            {
+                _radius = radius;
+            }
 
-        public void PerformAction()
-        {
-            // TODO: Use LoggingService to log "Setter Injection: Logging message."
-            LoggingService.Log("Setter Injection: Logging message.");
-        }
-    }
-
-    public interface IDependencyInjector
-    {
-        void SetDependency(ILoggingService loggingService);
-    }
-
-    public class MyClassInterfaceInjection : IDependencyInjector
-    {
-        private ILoggingService _loggingService;
-        public void SetDependency(ILoggingService loggingService)
-        {
-            _loggingService = loggingService;
+            public double GetArea()
+            {
+                return Math.PI * _radius * _radius;
+            }
         }
 
-        public void PerformAction()
+        public class Rectangle : IShape
         {
-            // TODO: Use _loggingService to log "Interface Injection: Logging message."
-            _loggingService.Log("Interface Injection: Logging message.");
+            private double _height;
+            private double _width;
+
+            public Rectangle(double height, double width)
+            {
+                _height = height;
+                _width = width;
+            }
+
+            public double GetArea()
+            {
+                return _height * _width;
+            }
         }
-    }
 
-    public class Exercise
-    {
-        public void Run()
+
+        static void Main(string[] args)
         {
-            ILoggingService loggingService = new LoggingService();
+            IShape[] shapes = new IShape[] 
+            { 
+                new Circle(5),
+                new Rectangle(4, 6),
+            };
 
-            var constructorInjection = new MyClassConstructorInjection(loggingService);
-            // TODO: Call PerformAction on constructorInjection
-            constructorInjection.PerformAction();
+            foreach (IShape shape in shapes) 
+            {
+                if (shape is Circle)
+                {
+                    Console.WriteLine($"Area: {shape.GetArea():F2}");
+                }
+                else if (shape is Rectangle) 
+                {
+                    Console.WriteLine($"Area: {shape.GetArea():F2}");
+                }
+            }
 
-            var setterInjection = new MyClassSetterInjection{ LoggingService = loggingService };
-            // TODO: Call PerformAction on setterInjection
-            //setterInjection.PerformAction();
-            
-
-            var interfaceInjection = new MyClassInterfaceInjection();
-            interfaceInjection.SetDependency(loggingService);
-            // TODO: Call PerformAction on interfaceInjection
-            interfaceInjection.PerformAction();
+            Console.ReadKey();
         }
     }
 }
