@@ -1,68 +1,85 @@
-﻿using System.Globalization;
-using System.Net;
-using System.Security.Cryptography;
+﻿using System;
 
-namespace ListsApp
+namespace Coding.Exercise
 {
-    internal class Program
-
+    public interface ILoggingService
     {
-        public interface ILogger
+        void Log(string message);
+    }
+
+    public class LoggingService : ILoggingService
+    {
+        public void Log(string message)
         {
-            void Log(string message);
+            Console.WriteLine(message);
+        }
+    }
+
+    public class MyClassConstructorInjection
+    {
+        private readonly ILoggingService _loggingService;
+        public MyClassConstructorInjection(ILoggingService loggingService)
+        {
+            _loggingService = loggingService;
         }
 
-        static void Main(string[] args)
+        public void PerformAction()
         {
-            ILogger fileLogger = new FileLogger();
-            Application app = new Application(fileLogger);
-            app.doWork();
+            // TODO: Use _loggingService to log "Constructor Injection: Logging message."
+            _loggingService.Log("Constructor Injection: Logging message.");
+        }
+    }
 
-            ILogger dbLogger = new DataBaseLogger();
-            app = new Application(dbLogger);
-            app.doWork();
+    public class MyClassSetterInjection
+    {
+        public ILoggingService LoggingService { private get; set; }
+
+        public void PerformAction()
+        {
+            // TODO: Use LoggingService to log "Setter Injection: Logging message."
+            LoggingService.Log("Setter Injection: Logging message.");
+        }
+    }
+
+    public interface IDependencyInjector
+    {
+        void SetDependency(ILoggingService loggingService);
+    }
+
+    public class MyClassInterfaceInjection : IDependencyInjector
+    {
+        private ILoggingService _loggingService;
+        public void SetDependency(ILoggingService loggingService)
+        {
+            _loggingService = loggingService;
         }
 
-        public class FileLogger : ILogger
+        public void PerformAction()
         {
-            public void Log(string message)
-            {
-                string dirPath = @"C:\Logs";
-                string filePath = Path.Combine(dirPath, "log.txt");
-
-                if (!Directory.Exists(dirPath))
-                {
-                    Directory.CreateDirectory(dirPath);
-                }
-
-                File.AppendAllText(filePath, message + "\n");
-            }
+            // TODO: Use _loggingService to log "Interface Injection: Logging message."
+            _loggingService.Log("Interface Injection: Logging message.");
         }
-        public class DataBaseLogger : ILogger
+    }
+
+    public class Exercise
+    {
+        public void Run()
         {
-            public void Log(string message)
-            {
-                Console.WriteLine($"Logging to DB. {message}");
-            }
+            ILoggingService loggingService = new LoggingService();
 
+            var constructorInjection = new MyClassConstructorInjection(loggingService);
+            // TODO: Call PerformAction on constructorInjection
+            constructorInjection.PerformAction();
 
-        }
+            var setterInjection = new MyClassSetterInjection{ LoggingService = loggingService };
+            // TODO: Call PerformAction on setterInjection
+            //setterInjection.PerformAction();
+            
 
-        public class Application
-        {
-            private readonly ILogger _logger;
-
-            public Application(ILogger logger)
-            {
-                _logger = logger;
-            }
-
-            public void doWork()
-            {
-                _logger.Log("Starting the work");
-                _logger.Log("Finishing");
-            }
-
+            var interfaceInjection = new MyClassInterfaceInjection();
+            interfaceInjection.SetDependency(loggingService);
+            // TODO: Call PerformAction on interfaceInjection
+            interfaceInjection.PerformAction();
         }
     }
 }
